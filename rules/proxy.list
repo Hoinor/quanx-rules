@@ -1,0 +1,5 @@
+# Quantumult X 代理规则
+# 当前没有实际规则；添加后启用对应订阅。
+# 可通过订阅条目的 force-policy 指定客户端已有的策略组。
+# 示例（去掉行首 # 后生效，请替换为实际域名）：
+# host-suffix, example.net, proxy

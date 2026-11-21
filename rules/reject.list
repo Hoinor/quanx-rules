@@ -1,0 +1,4 @@
+# Quantumult X 拦截规则
+# 当前没有实际规则；添加后启用对应订阅。
+# 示例（去掉行首 # 后生效，请替换为实际域名）：
+# host, ads.example.org, reject

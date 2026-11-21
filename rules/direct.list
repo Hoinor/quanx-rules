@@ -1,0 +1,5 @@
+# Quantumult X 直连规则
+# 当前没有实际规则；添加后启用对应订阅。
+# 示例（去掉行首 # 后生效，请替换为实际域名）：
+# host, api.example.com, direct
+# host-suffix, example.com, direct
