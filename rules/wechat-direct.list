@@ -1,0 +1,8 @@
+# Quantumult X：微信连接与图片域名直连
+# 覆盖 c2c.cdn.weixin.qq.com、minorshort.weixin.qq.com 等子域名，
+# 避免目标 IP 未命中 GEOIP,CN 时落入 FINAL 代理。
+# 图片域名参考：
+# https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/QuantumultX/WeChat/WeChat.list
+host-suffix, weixin.qq.com, direct
+host-suffix, qpic.cn, direct
+host-suffix, qlogo.cn, direct

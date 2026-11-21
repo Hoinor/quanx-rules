@@ -6,12 +6,13 @@
 
 | 文件 | 用途 | 订阅链接 |
 | --- | --- | --- |
+| `rules/wechat-direct.list` | 微信连接及常见图片域名直连 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/wechat-direct.list) |
 | `rules/dmit-us.list` | 指定 Apple / Siri / ChatGPT / OpenAI 域名走 DMIT 美国 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/dmit-us.list) |
 | `rules/direct.list` | 直连 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/direct.list) |
 | `rules/proxy.list` | 代理 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/proxy.list) |
 | `rules/reject.list` | 拦截 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/reject.list) |
 
-`dmit-us.list` 已包含 16 条实际规则，其余三个文件仅包含注释和格式示例，添加规则后再启用对应订阅。
+`wechat-direct.list` 包含 3 条直连规则，`dmit-us.list` 包含 16 条 DMIT 美国规则。其余三个文件仅包含注释和格式示例，添加规则后再启用对应订阅。
 
 ## 在 Quantumult X 中使用
 
@@ -26,17 +27,26 @@ static = DMIT美国, 你的DMIT美国节点完整名称
 
 ```ini
 [filter_remote]
+https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/wechat-direct.list, tag=微信直连, force-policy=direct, enabled=true
 https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/dmit-us.list, tag=DMIT美国专用, force-policy=DMIT美国, enabled=true
 https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/direct.list, tag=个人直连, force-policy=direct, enabled=false
 https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/proxy.list, tag=个人代理, force-policy=proxy, enabled=false
 https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/reject.list, tag=个人拦截, force-policy=reject, enabled=false
 ```
 
-DMIT 专用订阅已在示例中启用；其余模板添加实际规则后，再将对应条目的 `enabled=false` 改为 `enabled=true`，并在 Quantumult X 中更新该资源。
+微信直连和 DMIT 专用订阅已在示例中启用；其余模板添加实际规则后，再将对应条目的 `enabled=false` 改为 `enabled=true`，并在 Quantumult X 中更新该资源。
 
 `force-policy` 会覆盖规则文件中的策略。若已有合适的策略组或希望直接绑定节点，可把 `DMIT美国` 替换为该策略组或节点的完整名称；通用代理条目的 `proxy` 也可替换为已有的策略组名称。名称必须与客户端配置一致。使用分流模式，并结合已有规则检查匹配结果。
 
 [examples/filter_remote.conf](examples/filter_remote.conf) 保存了相同的配置片段，仅用于合并到现有配置。
+
+## 微信直连规则
+
+将 `wechat-direct.list` 的订阅条目加入现有 `[filter_remote]` 区段顶部，更新资源后重新建立连接。
+
+该规则将 `weixin.qq.com`、`qpic.cn`、`qlogo.cn` 及其子域名指定为直连，覆盖 `c2c.cdn.weixin.qq.com`、`minorshort.weixin.qq.com` 等微信连接。域名规则避免这些连接因目标 IP 未命中 `geoip, cn, direct` 而落入 `final` 代理策略。
+
+更新后重试发送图片，并在网络活动中确认对应域名命中 `DIRECT`。这里只配置指定域名；仅显示 IP 且没有关联域名的连接需要结合实际日志另行核对。
 
 ## DMIT 美国规则
 
