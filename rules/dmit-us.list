@@ -1,0 +1,19 @@
+# Quantumult X：Apple / Siri / ChatGPT / OpenAI 指定走 DMIT 美国
+# 使用前在客户端创建 DMIT美国 策略组，并选择实际的 DMIT 美国节点。
+# 也可通过订阅条目的 force-policy 指定已有策略组或节点的完整名称。
+host-suffix, itunes.apple.com, DMIT美国
+host-suffix, smp-device-content.apple.com, DMIT美国
+host-suffix, xp.apple.com, DMIT美国
+host-suffix, mesu.apple.com, DMIT美国
+host, guzzoni.apple.com, DMIT美国
+host-suffix, smoot.apple.com, DMIT美国
+host-suffix, chatgpt.com, DMIT美国
+host-suffix, openai.com, DMIT美国
+host, gateway.icloud.com, DMIT美国
+host, gs-loc-cn.apple.com, DMIT美国
+host, gspe1-ssl.ls.apple.com, DMIT美国
+host, p150-acsegateway.icloud.com, DMIT美国
+host, setup.icloud.com, DMIT美国
+host, bag.itunes.apple.com, DMIT美国
+host-keyword, siri, DMIT美国
+host-suffix, icloud-content.com, DMIT美国
