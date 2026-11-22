@@ -56,7 +56,7 @@ https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/reject.list, tag
 
 ## Google One 响应正文重写
 
-[重写订阅](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rewrites/google-one.snippet) · [脚本源码](scripts/google-one-response.js) · [原始 Stash 覆写](https://stash-google-one-rules-e0abf1.longquail.chatgpt.site/google-one-stash.stoverride)
+[重写订阅](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rewrites/google-one.snippet) · [脚本源码](scripts/google-one-response.js)
 
 将以下 URL 行追加到现有 `[rewrite_remote]` 区段：
 
@@ -71,10 +71,10 @@ https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rewrites/google-one.sn
 
 | 原文 | 替换为 |
 | --- | --- |
-| `30tb.ai.pro.m` | `30tb.m` |
-| `20tb.m.v2` | `20tb.m` |
+| `g1.ios.30tb.ai.pro.m` | `g1.ai.ultra.3months_ip_90p.acq` |
+| `g1.ios.20tb.m.v2` | `g1.20tb.3months_ip_90p.acq` |
 
-匹配范围与原覆写一致：仅 `https://one.google.com/ai?…`，不含问号的 `/ai` 不匹配。脚本仅替换响应正文中的这两个字符串，未验证订阅价格、购买资格或账户权益。已完成离线逻辑验证；实际请求能否被解密和重写，需要在客户端确认。停用时关闭该重写资源。
+匹配范围为 `https://one.google.com/ai?…`，不含问号的 `/ai` 不匹配。脚本替换响应正文中这两个完整标识的所有出现位置，未验证订阅价格、购买资格或账户权益。已完成离线逻辑验证；实际请求能否被解密和重写，需要在客户端确认。停用时关闭该重写资源。
 
 [examples/rewrite_remote.conf](examples/rewrite_remote.conf) 提供相同的配置片段。
 
