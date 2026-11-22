@@ -1,0 +1,6 @@
+# Google One 响应正文替换（Quantumult X）
+# 仅匹配 https://one.google.com/ai?…，不匹配不带问号的 /ai。
+# 需要开启重写和 MITM，并在 iOS 中安装、完全信任本机 Quantumult X 的 CA。
+# 来源：https://stash-google-one-rules-e0abf1.longquail.chatgpt.site/google-one-stash.stoverride
+hostname = one.google.com
+^https://one\.google\.com/ai\?.*$ url script-response-body https://raw.githubusercontent.com/Hoinor/quanx-rules/main/scripts/google-one-response.js

@@ -1,6 +1,6 @@
 # quanx-rules
 
-用于维护个人 Quantumult X（QuanX）分流规则。
+用于维护个人 Quantumult X（QuanX）分流规则与重写资源。
 
 ## 规则文件
 
@@ -53,6 +53,30 @@ https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/reject.list, tag
 保留提供的 16 条规则及其匹配范围，转换为 Quantumult X 原生语法：`DOMAIN` → `host`、`DOMAIN-SUFFIX` → `host-suffix`、`DOMAIN-KEYWORD` → `host-keyword`，策略统一为 `DMIT美国`。
 
 其中 `host-keyword, siri` 会匹配任何包含 `siri` 的域名；`bag.itunes.apple.com` 已被 `itunes.apple.com` 的后缀规则覆盖，但保留原始条目便于核对。规则只指定流量策略，实际出口由客户端选中的节点决定。
+
+## Google One 响应正文重写
+
+[重写订阅](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rewrites/google-one.snippet) · [脚本源码](scripts/google-one-response.js) · [原始 Stash 覆写](https://stash-google-one-rules-e0abf1.longquail.chatgpt.site/google-one-stash.stoverride)
+
+将以下 URL 行追加到现有 `[rewrite_remote]` 区段：
+
+```ini
+[rewrite_remote]
+https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rewrites/google-one.snippet, tag=Google One正文替换, update-interval=172800, opt-parser=false, enabled=true
+```
+
+在 QuanX 中更新该资源，开启重写和 MITM，并安装、完全信任本机 Quantumult X 的 CA 证书。iOS 的证书完全信任入口为「设置 → 通用 → 关于本机 → 证书信任设置」。资源中已声明 `hostname = one.google.com`；确认它出现在有效的 MITM 主机名列表中，然后重新打开相关页面。
+
+一个响应脚本顺序执行以下两处替换：
+
+| 原文 | 替换为 |
+| --- | --- |
+| `30tb.ai.pro.m` | `30tb.m` |
+| `20tb.m.v2` | `20tb.m` |
+
+匹配范围与原覆写一致：仅 `https://one.google.com/ai?…`，不含问号的 `/ai` 不匹配。脚本仅替换响应正文中的这两个字符串，未验证订阅价格、购买资格或账户权益。已完成离线逻辑验证；实际请求能否被解密和重写，需要在客户端确认。停用时关闭该重写资源。
+
+[examples/rewrite_remote.conf](examples/rewrite_remote.conf) 提供相同的配置片段。
 
 ## 维护规则
 
