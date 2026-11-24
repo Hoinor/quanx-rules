@@ -1,0 +1,20 @@
+# Quantumult X：金融 App 分流
+# 在客户端创建 香港节点 和 英国节点 策略组，并选定对应地区的实际节点。
+# 本文件包含不同策略，订阅时不要统一设置 force-policy。
+# 依据官方关联域名整理，尚未通过手机流量日志确认全部第三方接口。
+
+# Ethena Pay → 香港
+# https://apps.apple.com/us/app/ethena-pay/id6763149705
+# App Store 引用 wallet.ethenapay-api.co；官网为 pay.ethena.fi。
+host-suffix, ethena.fi, 香港节点
+host-suffix, ethenapay-api.co, 香港节点
+
+# ether.fi → 英国
+# https://apps.apple.com/us/app/ether-fi-crypto-card-spend/id6670338367
+host-suffix, ether.fi, 英国节点
+
+# Pulsar Money → 英国
+# https://apps.apple.com/us/app/pulsar-money/id6757467196
+host-suffix, pulsar.money, 英国节点
+# 官网使用的静态资源域名，尚未确认手机 App 是否依赖。
+host, pulsarmoney.b-cdn.net, 英国节点

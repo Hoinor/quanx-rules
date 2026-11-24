@@ -6,27 +6,31 @@
 
 | 文件 | 用途 | 订阅链接 |
 | --- | --- | --- |
+| `rules/finance-apps.list` | Ethena Pay 走香港；ether.fi、Pulsar Money 走英国 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/finance-apps.list) |
 | `rules/wechat-direct.list` | 微信连接及常见图片域名直连 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/wechat-direct.list) |
 | `rules/dmit-us.list` | 指定 Apple / Siri / ChatGPT / OpenAI 域名走 DMIT 美国 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/dmit-us.list) |
 | `rules/direct.list` | 直连 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/direct.list) |
 | `rules/proxy.list` | 代理 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/proxy.list) |
 | `rules/reject.list` | 拦截 | [Raw](https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/reject.list) |
 
-`wechat-direct.list` 包含 3 条直连规则，`dmit-us.list` 包含 16 条 DMIT 美国规则。其余三个文件仅包含注释和格式示例，添加规则后再启用对应订阅。
+`finance-apps.list` 包含 5 条金融 App 规则，`wechat-direct.list` 包含 3 条直连规则，`dmit-us.list` 包含 16 条 DMIT 美国规则。其余三个文件仅包含注释和格式示例，添加规则后再启用对应订阅。
 
 ## 在 Quantumult X 中使用
 
-先在 Quantumult X 中建立名为 `DMIT美国` 的策略组，并选中实际的 DMIT 美国节点。如果使用配置文件，可在现有 `[policy]` 区段中添加以下条目，**将占位文字替换为客户端中的完整节点名称**：
+先在 Quantumult X 中建立 `DMIT美国`、`香港节点`、`英国节点` 策略组，并选中对应地区的实际节点。如果使用配置文件，可在现有 `[policy]` 区段中添加以下条目，**将占位文字替换为客户端中的完整节点名称**；已有同名策略组时直接使用，不要重复创建：
 
 ```ini
 [policy]
 static = DMIT美国, 你的DMIT美国节点完整名称
+static = 香港节点, 你的香港节点完整名称
+static = 英国节点, 你的英国节点完整名称
 ```
 
 将以下条目加入现有配置的 `[filter_remote]` 区段；如果区段已存在，只追加 URL 行。将 DMIT 专用条目放在可能匹配相同域名的通用 Apple、国内直连等远程规则之前；如果本地规则也匹配这些域名，需要同时检查其优先级。
 
 ```ini
 [filter_remote]
+https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/finance-apps.list, tag=金融App分流, update-interval=172800, opt-parser=false, enabled=true
 https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/wechat-direct.list, tag=微信直连, force-policy=direct, enabled=true
 https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/dmit-us.list, tag=DMIT美国专用, force-policy=DMIT美国, enabled=true
 https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/direct.list, tag=个人直连, force-policy=direct, enabled=false
@@ -34,11 +38,27 @@ https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/proxy.list, tag=
 https://raw.githubusercontent.com/Hoinor/quanx-rules/main/rules/reject.list, tag=个人拦截, force-policy=reject, enabled=false
 ```
 
-微信直连和 DMIT 专用订阅已在示例中启用；其余模板添加实际规则后，再将对应条目的 `enabled=false` 改为 `enabled=true`，并在 Quantumult X 中更新该资源。
+金融 App、微信直连和 DMIT 专用订阅已在示例中启用；其余模板添加实际规则后，再将对应条目的 `enabled=false` 改为 `enabled=true`，并在 Quantumult X 中更新该资源。
 
 `force-policy` 会覆盖规则文件中的策略。若已有合适的策略组或希望直接绑定节点，可把 `DMIT美国` 替换为该策略组或节点的完整名称；通用代理条目的 `proxy` 也可替换为已有的策略组名称。名称必须与客户端配置一致。使用分流模式，并结合已有规则检查匹配结果。
 
 [examples/filter_remote.conf](examples/filter_remote.conf) 保存了相同的配置片段，仅用于合并到现有配置。
+
+## 金融 App 分流
+
+`finance-apps.list` 使用文件内的策略分别指定出口：
+
+| App | 策略组 | 域名 |
+| --- | --- | --- |
+| Ethena Pay | `香港节点` | `ethena.fi`、`ethenapay-api.co` 及其子域名 |
+| ether.fi | `英国节点` | `ether.fi` 及其子域名 |
+| Pulsar Money | `英国节点` | `pulsar.money` 及其子域名，以及精确主机 `pulsarmoney.b-cdn.net` |
+
+导入时**不要为该资源设置统一的 `force-policy`**，否则会覆盖文件中的香港、英国策略。客户端必须存在 `香港节点`、`英国节点` 两个策略组，并分别选择实际的香港、英国节点；若当前名称不同，可创建这两个策略组或修改文件中的策略名。
+
+将此资源放在可能匹配相同域名的通用币圈、代理规则之前。若之前已在 `[filter_local]` 添加这些域名的 `proxy` 规则，请一并移除或改为表中的策略，避免继续命中旧出口。更新资源并重新建立连接后，在网络活动中核对实际策略和节点。
+
+域名来自三款 App 的官方关联资料；Pulsar CDN 来自官网静态资源。规则是已确认域名的基础分流，尚未通过手机流量日志验证所有登录、支付和第三方接口。具体来源保留在规则文件注释中。
 
 ## 微信直连规则
 
